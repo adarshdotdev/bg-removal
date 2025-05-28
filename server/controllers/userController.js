@@ -6,6 +6,7 @@ import User from '../models/userModel.js'
 import { Webhook } from "svix"
 
 const clerkWebhooks = async (req, res) => {
+    console.log("reaced############")
     try {
         // Create a svix instance with clertk webhook secret
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SERCRET)
@@ -15,7 +16,7 @@ const clerkWebhooks = async (req, res) => {
             "svix-id": req.headers['svix-id'],
             "svix-timestamp": req.headers["svix-timestamp"],
             "svix-signature": req.headers["svix-signature"]
-        })
+        });
 
         const { data, type } = req.body
 
@@ -24,7 +25,7 @@ const clerkWebhooks = async (req, res) => {
 
                 const userData = {
                     clerkId: data.id,
-                    email: data.email_addresses[0].email_addresses,
+                    email: data.email_addresses[0].email_address,
                     firstName: data.first_name,
                     lastName: data.last_name,
                     photo: data.image_url
@@ -42,7 +43,7 @@ const clerkWebhooks = async (req, res) => {
 
                 const userData = {
 
-                    email: data.email_addresses[0].email_addresses,
+                    email: data.email_addresses[0].email_address,
                     firstName: data.first_name,
                     lastName: data.last_name,
                     photo: data.image_url
