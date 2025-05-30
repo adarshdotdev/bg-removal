@@ -6,7 +6,7 @@ import User from '../models/userModel.js'
 import { Webhook } from "svix"
 
 const clerkWebhooks = async (req, res) => {
-    console.log("reaced############")
+
     try {
         // Create a svix instance with clertk webhook secret
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SERCRET)
@@ -71,11 +71,28 @@ const clerkWebhooks = async (req, res) => {
 
 
     } catch (error) {
-
+        console.log(error)
         console.log(error.message)
         return res.json({ success: false, message: error.message })
 
     }
 }
 
-export { clerkWebhooks }
+// API Controller function to get user available credits data
+const userCredits = async (req, res) => {
+    try {
+        const { clerkId } = req.body
+
+        const user = await User.findOne({ clerkId })
+
+        return res.json({ success: true, credits: user.creditBalance })
+
+    } catch (error) {
+        console.log(error)
+        console.log(error.message)
+        return res.json({ success: false, message: error.message })
+    }
+}
+
+
+export { clerkWebhooks, userCredits }
